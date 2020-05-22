@@ -21,7 +21,7 @@ void Display(struct Array arr)
 
 void Append(struct Array *arr, int x)
 {
-  if(arr->length<arr->size)
+  if(arr->length < arr->size)
     arr->A[arr->length++]=x;
 }
 
@@ -29,9 +29,9 @@ void Insert(struct Array *arr,int index, int x)
 {
   int i;
 
-  if(index>=0 && index<=arr->length)
+  if(index >=0 && index <= arr->length)
   {
-    for(i=arr->length;i>index;i--)
+    for(i = arr->length;i > index;i--)
       arr->A[i]=arr->A[i-1];
     arr->A[index]=x;
     arr->length++;
@@ -43,10 +43,10 @@ int Delete(struct Array *arr, int index)
   int x=0;
   int i=0;
 
-  if(index>=0 && index<arr->length)
+  if(index >= 0 && index < arr->length)
   {
     x=arr->A[index];
-    for(i=index;i<arr->length-1;i++)
+    for(i = index;i < arr->length-1;i++)
       arr->A[i]=arr->A[i+1];
     arr->length--;
     return x;
@@ -66,11 +66,11 @@ void swap(int *x, int *y)
 int LinearSearch(struct Array *arr, int key)
 {
   int i;
-  for(i=0;i<arr->length;i++)
+  for(i = 0;i < arr->length;i++)
   {
-    if(key==arr->A[i])
+    if(key == arr->A[i])
     {
-      swap(&arr->A[i],&arr->A[i-1]);
+      swap(&arr->A[i], &arr->A[i-1]);
       return i;
     }
 
@@ -114,18 +114,70 @@ int RBinSearch(int a[], int l,int h, int key)
   return -1;
 }
 
+void Reverse (struct Array *arr)
+{
+  int *B;
+  int i, j;
 
+  B = (int *)malloc(arr->length*sizeof(int));
+  for(i=arr->length-1,j=0;i>=0;i--,j++)
+    B[j]=arr->A[i];
+  for(i=0;i<arr->length;i++)
+    arr->A[i]=B[i];
+}
+
+void ReverseSwap(struct Array *arr  )
+{
+  int i, j;
+  for(i=0, j=arr->length-1; i<j; i++, j--)
+  {
+    swap(&arr->A[i], &arr->A[j]);
+  }
+}
+
+struct Array* Merge(struct Array *arr1, struct Array *arr2)
+{
+
+  int i,j,k;
+  i=j=k=0;
+
+  struct Array *arr3=(struct Array *)malloc(sizeof(struct Array));
+
+  while(i<arr1->length && j<arr2->length)
+  {
+    if(arr1->A[i]<arr2->A[j])
+      arr3->A[k++] = arr1->A[i++];
+    else
+      arr3->A[k++] = arr2->A[j++];
+  }
+
+  for(;i<arr1->length;i++)
+    arr3->A[k++] = arr1->A[i++];
+  for(;j<arr2->length;j++)
+    arr3->A[k++] = arr2->A[j++];
+  arr3->length=arr1->length+arr2->length;
+  arr3->size=10;
+
+  return arr3;
+}
 int main()
 {
   struct Array arr={{2,3,4,5,6},10,5};
-
+  struct Array arr1={{2,6,10,15,25},10,5};
+  struct Array arr2={{3,4,7,18,20},10,5};
+  struct Array *arr3;
+  arr3 = Merge(&arr1, &arr2);
   //Insert(&arr,2,10); 
   //Append(&arr,1);
   //printf("%d\n", Delete(&arr,6));
   //printf("%d\n", LinearSearch(&arr, 6));
   printf("%d\n", BinarySearch(arr, 6));
   printf("%d\n", RBinSearch(arr.A,0,arr.length,6));
+  Reverse(&arr);
   Display(arr);
+  ReverseSwap(&arr);
+  Display(arr);
+  Display(*arr3);
 
   return 0;
 }
