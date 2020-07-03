@@ -3,7 +3,7 @@
 
 struct Node
 {
-  int data;
+  char data;
   struct Node *next; // next pointer is of datatype `struct Node`
 }*top=NULL;
 
@@ -22,7 +22,7 @@ void push(int x)
   }
 }
 
-int pop()
+char pop()
 {
   struct Node *t;
   int x = -1;
@@ -49,16 +49,31 @@ void Display()
   }
   printf("\n");
 }
-  
+
+int isBalanced(char *exp)
+{
+  int i;
+  for(i=0;exp[i]!='\0';i++)
+  {
+    if(exp[i] == '(')
+      push(exp[i]);
+    else if(exp[i] == ')')
+    {
+      if(top==NULL)
+        return 0;
+      pop();
+    }
+  }
+  if(top==NULL)
+    return 1;
+  else
+    return 0;
+}
+
 int main()
 {
-  push(10);
-  push(20);
-  push(30);
-
-  Display();
-  
-  printf("%d ", pop());
+  char *exp="((a+b)*(c-d))";
+  printf("%d ", isBalanced(exp));
 
   return 0;
 }
